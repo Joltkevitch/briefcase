@@ -1,0 +1,15 @@
+<div class="container column header-container" *ngIf="headerData">
+  <div class="container row">
+    <div class="links container row">
+      <a
+        *ngFor="let link of headerData.headerLinks"
+        [href]="link.route"
+        [class]="link.class"
+        class="default-color"
+        (click)="selectLink(link)"
+        >{{ link.name }}</a
+      >
+    </div>
+  </div>
+  <div class="actions"></div>
+</div>

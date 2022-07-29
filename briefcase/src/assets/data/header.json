@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0-Alpha-1",
+  "headerLinks": [
+    {
+      "name": "About Me",
+      "route": "#aboutMe",
+      "selected": false,
+      "icon": ""
+    },
+    {
+      "name": "Experience",
+      "route": "#experience",
+      "selected": false,
+      "icon": ""
+    },
+    {
+      "name": "Skills",
+      "route": "#skills",
+      "selected": false,
+      "icon": ""
+    },
+    {
+      "name": "Contact",
+      "route": "#contact",
+      "selected": false,
+      "icon": ""
+    }
+  ]
+}

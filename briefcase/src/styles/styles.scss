@@ -1,0 +1,122 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+
+@import './palletes/moon.scss';
+@import './palletes/ocean.scss';
+@import './palletes/pink.scss';
+@import './palletes/sky.scss';
+@include mat.core();
+
+$briefcase-primary: mat.define-palette($md-pink);
+$briefcase-accent: mat.define-palette($md-oceanblack, A200, A100, A400);
+$briefcase-warn: mat.define-palette($md-moondark);
+
+$briefcase-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $briefcase-primary,
+      accent: $briefcase-accent,
+      warn: $briefcase-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($briefcase-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.column-reverse {
+  flex-direction: column-reverse;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.title {
+  font-size: 30px;
+}
+
+.subtitle {
+  font-size: 20px;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.default-color,
+.unselected {
+  color: white;
+}
+
+a:hover {
+  color: mat.get-color-from-palette($briefcase-primary, 500) !important;
+}
+
+a {
+  text-decoration: none;
+}
+
+.selected {
+  color: mat.get-color-from-palette($briefcase-primary, 800) !important;
+}
+
+.theme-primary-color {
+  color: mat.get-color-from-palette($briefcase-primary, 500) !important;
+}
+
+.theme-primary-background-color {
+  background-color: mat.get-color-from-palette($briefcase-primary, 500) !important;
+}
+
+.theme-accent-color {
+  color: mat.get-color-from-palette($briefcase-accent, 500) !important;
+}
+
+.theme-accent-background-color {
+  background-color: mat.get-color-from-palette($briefcase-accent, 500) !important;
+}
+
+.theme-warn-color {
+  color: mat.get-color-from-palette($briefcase-warn, 500) !important;
+}
+
+.theme-warn-background-color {
+  background-color: mat.get-color-from-palette($briefcase-warn, 500) !important;
+}
+
+.header-container {
+  background: linear-gradient(
+    170deg,
+    rgba(6, 0, 25, 0.7) 0%,
+    rgba(94, 92, 94, 0.6040966728) 35%,
+    rgba(146, 150, 153, 0.4040966728) 100%
+  );
+}
