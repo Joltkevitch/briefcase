@@ -77,50 +77,50 @@ div {
 }
 
 .selected {
-    color: mat.get-color-from-palette($briefcase-primary, 800) !important;
+    color: mat.get-color-from-palette($briefcase-primary, 800);
 }
 
 .primary-color {
-    color: mat.get-color-from-palette($briefcase-primary, 500) !important;
+    color: mat.get-color-from-palette($briefcase-primary, 500);
 }
 
 .primary-border-color {
-    border-color: mat.get-color-from-palette($briefcase-primary, 500) !important;
+    border-color: mat.get-color-from-palette($briefcase-primary, 500);
 }
 
 .primary-background-color {
-    background-color: mat.get-color-from-palette($briefcase-primary, 500) !important;
+    background-color: mat.get-color-from-palette($briefcase-primary, 500);
 }
 
 .accent-color {
-    color: mat.get-color-from-palette($briefcase-accent, 500) !important;
+    color: mat.get-color-from-palette($briefcase-accent, 500);
 }
 
 .accent-border-color {
-    border-color: mat.get-color-from-palette($briefcase-accent, 500) !important;
+    border-color: mat.get-color-from-palette($briefcase-accent, 500);
 }
 
 .accent-background-color {
-    background-color: mat.get-color-from-palette($briefcase-accent, 500) !important;
+    background-color: mat.get-color-from-palette($briefcase-accent, 500);
 }
 
 .warn-color {
-    color: mat.get-color-from-palette($briefcase-warn, 500) !important;
+    color: mat.get-color-from-palette($briefcase-warn, 500);
 }
 
 .warn-border-color {
-    border-color: mat.get-color-from-palette($briefcase-warn, 500) !important;
+    border-color: mat.get-color-from-palette($briefcase-warn, 500);
 }
 
 .warn-background-color {
-    background-color: mat.get-color-from-palette($briefcase-warn, 500) !important;
+    background-color: mat.get-color-from-palette($briefcase-warn, 500);
 }
 
 .header-container {
-    background-color: mat.get-color-from-palette($briefcase-accent, 900) !important;
+    background-color: mat.get-color-from-palette($briefcase-accent, 900);
     opacity: 0.9;
 }
 
 .content-container {
-    background-color: mat.get-color-from-palette($briefcase-accent, 800) !important;
+    background-color: mat.get-color-from-palette($briefcase-accent, 800);
 }

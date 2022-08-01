@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CommonModule } from '@angular/common';
-import { UwuButton } from './directives/uwu-button.directive';
+import { UwuButtonDirective } from './directives/uwu-directive/uwu-button.directive';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, UwuButton],
+  declarations: [HeaderComponent, FooterComponent, UwuButtonDirective],
   imports: [CommonModule],
-  exports: [HeaderComponent, FooterComponent, UwuButton],
+  exports: [HeaderComponent, FooterComponent, UwuButtonDirective],
 })
 export class SharedModule {}
