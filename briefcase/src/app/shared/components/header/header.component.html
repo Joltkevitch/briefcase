@@ -1,10 +1,13 @@
 <div class="container column header-container" *ngIf="headerData">
   <div class="container row">
+    <div class="logo">
+      <uwu-logo></uwu-logo>
+    </div>
     <div class="links container row">
       <a
         *ngFor="let link of headerData.headerLinks"
         [href]="link.route"
-        uwu-button
+        uwu-raised-button
         [class]="link.class"
         class="default-color"
         (click)="selectLink(link)"
