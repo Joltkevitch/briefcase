@@ -13,20 +13,20 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
-import { UwuButtonAnimationOptions } from './uwu-button-animation-options';
+import { UwuButtonAnimationOptions } from '../models/uwu-button-animation-options';
 
 /**
  * Directive meant to be applied to `button`s and `a` elements
  * It creates a styled border line and a ripple animation.
- *
+ *d
  * @export
  * @class UwuButton
  * @implements {OnInit}
  */
 @Directive({
-  selector: '[uwu-button]',
+  selector: '[uwu-raised-button]',
 })
-export class UwuButtonDirective implements OnInit {
+export class UwuRaisedButtonDirective implements OnInit {
   /**
    * Color type for the button. Following the Material design pattern, primary, warn and accent.
    * By default primary.
@@ -50,29 +50,30 @@ export class UwuButtonDirective implements OnInit {
   private wapper: HTMLElement;
 
   private wapperStyles: string = `
-  border-width: 0.5px;
-  border-style:  solid;
-  border-radius: 5px;
-  width: 100%;
-  margin: 0 0.5em;
-  cursor: pointer;
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-`;
-  private styles: string = ` 
-  font-weight: 500;
-  min-height: 3em;
-  display: inline-flex;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: transparent;
+    border-width: 0.5px;
+    border-style:  solid;
+    border-radius: 5px;
+    width: 100%;
+    margin: 0 0.5em;
+    cursor: pointer;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
   `;
+  private styles: string = ` 
+    font-weight: 500;
+    min-height: 3em;
+    display: inline-flex;
+    z-index: 5;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    `;
 
   /**
    * On click event. Triggered when the user clicks on the element using the directive.
@@ -87,6 +88,25 @@ export class UwuButtonDirective implements OnInit {
     if (this.animationOptions.isEnable) {
       this.setRippleAnimation(event);
     }
+  }
+
+  @HostListener('mouseenter') onHover(): void {
+    const animation = this.animationBuilder.build([
+      style({ boxShadow: 'none' }),
+      animate('300ms', style({ boxShadow: '0px 2px 5px -3px white' })),
+    ]);
+
+    const player = animation.create(this.wapper);
+    player.play();
+  }
+  @HostListener('mouseleave') offHover(): void {
+    const animation = this.animationBuilder.build([
+      style({ boxShadow: '0px 2px 5px -3px white' }),
+      animate('300ms', style({ boxShadow: 'none' })),
+    ]);
+
+    const player = animation.create(this.wapper);
+    player.play();
   }
 
   /**
@@ -116,23 +136,27 @@ export class UwuButtonDirective implements OnInit {
 
   private setRippleAnimation(event: any): void {
     const ripple: HTMLElement = this.setRippleElement(event);
-    const player: AnimationPlayer = this.createAnimation(ripple);
-
+    const player: AnimationPlayer = this.createRippleAnimation(ripple);
     player.play();
     player.onDone(() => {
-      this.renderer.removeChild(this.nativeElement, ripple);
+      this.onDoneAnimation(ripple);
     });
   }
 
-  private createAnimation(ripple: HTMLElement): AnimationPlayer {
+  private onDoneAnimation(ripple: HTMLElement): void {
+    this.renderer.removeChild(this.nativeElement, ripple);
+  }
+
+
+  private createRippleAnimation(element: HTMLElement): AnimationPlayer {
     const animation = this.animationBuilder.build([
-      style({ opacity: 0.7, transform: 'scale(0)' }),
+      style({ opacity: 0.8, transform: 'scale(0)' }),
       animate(
-        '{{timing}} linear',
+        '{{timing}} ease-in-out',
         style({ opacity: 0, transform: 'scale(4)' })
       ),
     ]);
-    const player = animation.create(ripple, {
+    const player = animation.create(element, {
       delay: this.animationOptions.delay,
       params: { timing: this.animationOptions.timing },
     });
@@ -141,7 +165,7 @@ export class UwuButtonDirective implements OnInit {
 
   private setRippleElement(event: PointerEvent): HTMLElement {
     const ripple: HTMLElement = this.renderer.createElement('span');
-    this.renderer.appendChild(this.nativeElement, ripple);
+    this.renderer.appendChild(this.wapper, ripple);
     this.setInitialRippleStyles(ripple);
     this.setRipplePositioning(ripple, event);
     return ripple;
@@ -152,11 +176,13 @@ export class UwuButtonDirective implements OnInit {
       ripple,
       'style',
       `
-      position: absolute;
-      border-radius: 50%;
-      transform: scale(0);
-      background-color: rgba(255, 255, 255, 0.7);
-    `
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        background-color: #f6378b;
+        opacity: 0;
+        z-index: 0;
+      `
     );
   }
 
