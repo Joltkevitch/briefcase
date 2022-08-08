@@ -55,7 +55,6 @@ export class UwuButtonDirective implements OnInit {
   border-radius: 5px;
   width: 100%;
   margin: 0 0.5em;
-  max-height: 2.8em;
   cursor: pointer;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
   text-align: center;
@@ -115,7 +114,7 @@ export class UwuButtonDirective implements OnInit {
     this.wrapElementInsideDiv();
   }
 
-  private setRippleAnimation(event: PointerEvent): void {
+  private setRippleAnimation(event: any): void {
     const ripple: HTMLElement = this.setRippleElement(event);
     const player: AnimationPlayer = this.createAnimation(ripple);
 
