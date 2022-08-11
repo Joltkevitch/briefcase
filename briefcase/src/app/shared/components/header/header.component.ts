@@ -4,7 +4,7 @@ import { HeaderData } from './header-data.model';
 import { HeaderLink } from './header-link.model';
 
 @Component({
-  selector: 'app-header',
+  selector: 'uwu-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
@@ -16,7 +16,10 @@ export class HeaderComponent implements OnInit {
   public ngOnInit(): void {
     this.staticDataService.getStaticData<HeaderData>('header').subscribe({
       next: (data: HeaderData) => {
-        this.headerData = new HeaderData(data);
+        this.headerData = new HeaderData({
+          version: data.version,
+          headerLinks: data.headerLinks.map((link) => new HeaderLink(link)),
+        });
       },
     });
   }
