@@ -1,0 +1,15 @@
+<div class="container column days">
+  <div class="container column">
+    <div class="grid-container">
+      <div
+        class="calendar-day container column"
+        *ngFor="let dayWrapper of monthDays"
+      >
+        <div class="container row day-data">
+          <span class="day-number">{{ dayWrapper.day }}</span>
+          <span class="weekday">{{ dayWrapper.weekDayName }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

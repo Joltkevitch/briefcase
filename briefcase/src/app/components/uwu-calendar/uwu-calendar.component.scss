@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.calendar {
+    overflow: auto;
+    height: 88vh;
+}
+
+.column {
+    flex-direction: column;
+    width: 100%;
+}
+
+.column-reverse {
+    flex-direction: column-reverse;
+    width: 100%;
+}
+
+.row {
+    flex-direction: row;
+    width: 100%;
+}
+
+.row-reverse {
+    flex-direction: row-reverse;
+    width: 100%;
+}
+
+.grid-container {
+    display: grid;
+    width: 100%;
+}
+
+div {
+    color: white;
+}
+
+:host {
+    width: 100%;
+    height: 100%;
+}

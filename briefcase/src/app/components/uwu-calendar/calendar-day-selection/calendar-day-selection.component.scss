@@ -1,0 +1,43 @@
+.grid-container {
+    grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
+    grid-template-rows: 20% 20% 20% 20% 20%;
+    justify-content: center;
+    column-gap: 0.10%;
+    row-gap: 0.10%;
+    height: 100%;
+    margin: 2em 0em;
+}
+
+.week-days {
+    display: grid;
+    grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
+    justify-content: center;
+    text-align: center;
+    margin: 0em;
+    position: fixed;
+    width: 100%;
+}
+
+.calendar-day {
+    border: 0.5px solid white;
+    border-radius: 5px;
+}
+
+.day-number {
+    padding: 5px 0 0 5px;
+    position: relative;
+    font-size: large;
+    font-weight: 500;
+}
+
+.weekday {
+    font-size: 12px;
+    font-weight: 100;
+    padding: 5px 5px 0 0px;
+    align-self: flex-end;
+    letter-spacing: 0.5px
+}
+
+.day-data {
+    justify-content: space-between;
+}
