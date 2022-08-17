@@ -1,6 +1,7 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Month, WeekDay } from '../calendar.prototype';
 import { DayWrapper } from './day-wrapper.model';
+import { ITimeRangeEvent, TimeRangeEvent } from './time-range-event.model';
 
 export class CalendarData {
   selectedDate: Date;
@@ -8,6 +9,9 @@ export class CalendarData {
   $onYearChange: BehaviorSubject<number>;
   $onMonthChange: BehaviorSubject<Month>;
   $onDayChange: BehaviorSubject<number>;
+  $onTimeRangeEventsChange: Subject<ITimeRangeEvent[]>;
+  timeRangeEvents: ITimeRangeEvent[];
+  currentCalendarGrid: DayWrapper[] = [];
 
   constructor() {
     this.selectedDate = new Date();
@@ -17,6 +21,15 @@ export class CalendarData {
     );
     this.$onMonthChange = new BehaviorSubject(this.selectedDate.getUTCMonth());
     this.$onDayChange = new BehaviorSubject(this.selectedDate.getUTCDate());
+    this.$onTimeRangeEventsChange = new Subject();
+  }
+
+  onTimeRangeEventsChanges(timeRangeEvents: ITimeRangeEvent[]): void {
+    this.timeRangeEvents = timeRangeEvents.map(
+      (timeRangeEvent) => new TimeRangeEvent(timeRangeEvent)
+    );
+    this.setCalendarGridEventTimeRanges();
+    this.$onTimeRangeEventsChange.next(timeRangeEvents);
   }
 
   onNewYearValue(year: number): void {
@@ -35,64 +48,67 @@ export class CalendarData {
   }
 
   getMonthGridInDays(month?: Month): DayWrapper[] {
-    console.log(WeekDay.toString(0));
     const monthToUse = this.getMonthToUse(month);
+    this.setDayWrappersOfCurrentMonth(monthToUse);
+    this.setDayWrappersOfPreviousMonth(monthToUse);
+    this.setDayWrappersOfNextMonth(monthToUse);
+    this.setCalendarGridEventTimeRanges();
+    return this.currentCalendarGrid;
+  }
+
+  setCalendarGridEventTimeRanges(): void {
+    console.log(this.timeRangeEvents);
+    this.currentCalendarGrid = this.currentCalendarGrid.map((dayWrapper) =>
+      dayWrapper.setTimeRangeEvents(this.timeRangeEvents)
+    );
+  }
+
+  private setDayWrappersOfCurrentMonth(monthToUse: Month) {
     const monthDayCount = this.getMonthDayCount(monthToUse);
-    const dayWrappers: DayWrapper[] = [];
     for (let day = 1; day <= monthDayCount; day++) {
-      const dayWapper = new DayWrapper(
-        day,
-        this.getDayWeekDay(day),
-        monthToUse
+      this.currentCalendarGrid.push(
+        new DayWrapper(
+          new Date(this.selectedDate.getUTCFullYear(), monthToUse, day)
+        )
       );
-      dayWrappers.push(dayWapper);
     }
-
-    return [
-      ...this.getDayWrapperOfPreviousMonth(monthToUse),
-      ...dayWrappers,
-      ...this.getDayWrapperOfNextMonth(monthToUse),
-    ];
   }
 
-  private getDayWrapperOfPreviousMonth(currentMonth: Month): DayWrapper[] {
-    const previusMonth = Month.previousMonth(currentMonth);
+  private setDayWrappersOfPreviousMonth(currentMonth: Month): void {
     const monthInitialWeekDay = this.getMonthInitialWeekDay(currentMonth);
-    if (monthInitialWeekDay === WeekDay.Sunday) {
-      return [];
+    if (monthInitialWeekDay !== WeekDay.Sunday) {
+      const previusMonth = Month.previousMonth(currentMonth);
+      const daysPreviousMonth = Math.abs(monthInitialWeekDay - 7);
+      let previousMonthDayCount = this.getMonthDayCount(previusMonth);
+      for (let index = 0; index <= daysPreviousMonth; index++) {
+        this.currentCalendarGrid = [
+          new DayWrapper(
+            new Date(
+              this.selectedDate.getUTCFullYear(),
+              previusMonth,
+              --previousMonthDayCount
+            )
+          ),
+          ...this.currentCalendarGrid,
+        ];
+      }
     }
-
-    const daysPreviousMonth = Math.abs(monthInitialWeekDay - 7);
-    const previusDays: DayWrapper[] = [];
-    let previousMonthDayCount = this.getMonthDayCount(previusMonth);
-    for (let index = 0; index <= daysPreviousMonth; index++) {
-      const dayWapper = new DayWrapper(
-        --previousMonthDayCount,
-        this.getDayWeekDay(index, previusMonth),
-        previusMonth
-      );
-      previusDays.push(dayWapper);
-    }
-    return previusDays.reverse();
   }
 
-  private getDayWrapperOfNextMonth(currentMonth: Month): DayWrapper[] {
+  private setDayWrappersOfNextMonth(currentMonth: Month): void {
     const nextMonth = Month.nextMonth(currentMonth);
     const currentMonthLastWeekDay = this.getMonthLastWeekDay(currentMonth);
-    if (currentMonthLastWeekDay === WeekDay.Sunday) {
-      return [];
+    if (currentMonthLastWeekDay !== WeekDay.Sunday) {
+      const nextMonthDays = Math.abs(currentMonthLastWeekDay - 7);
+      for (let day = 1; day < nextMonthDays; day++) {
+        this.currentCalendarGrid = [
+          ...this.currentCalendarGrid,
+          new DayWrapper(
+            new Date(this.selectedDate.getUTCFullYear(), nextMonth, day)
+          ),
+        ];
+      }
     }
-    const daysNextMonth = Math.abs(currentMonthLastWeekDay - 7);
-    const nextDays: DayWrapper[] = [];
-    for (let index = 1; index < daysNextMonth; index++) {
-      const dayWapper = new DayWrapper(
-        index,
-        this.getDayWeekDay(index, nextMonth),
-        nextMonth
-      );
-      nextDays.push(dayWapper);
-    }
-    return nextDays;
   }
 
   getDayWeekDay(day: number, month?: Month): number {
@@ -104,7 +120,7 @@ export class CalendarData {
   }
 
   getMonthToUse(month?: Month): Month {
-    return month ? (month === 11 ? 0 : month) : this.selectedDate.getUTCMonth();
+    return month ? (month > 11 ? 0 : month) : this.selectedDate.getUTCMonth();
   }
 
   getMonthDayCount(month: Month): number {
@@ -123,5 +139,12 @@ export class CalendarData {
       month,
       this.getMonthDayCount(month)
     ).getUTCDay();
+  }
+
+  unsubscribe(): void {
+    this.$onDayChange.unsubscribe();
+    this.$onMonthChange.unsubscribe();
+    this.$onYearChange.unsubscribe();
+    this.$onTimeRangeEventsChange.unsubscribe();
   }
 }

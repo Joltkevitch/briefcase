@@ -6,6 +6,9 @@
         *ngFor="let dayWrapper of monthDays"
       >
         <div class="container row day-data">
+          <ng-container *ngFor="let event of dayWrapper.timeRangeEvents">
+            <span class="day-event" day-event [dayEvent]="event"></span>
+          </ng-container>
           <span class="day-number">{{ dayWrapper.day }}</span>
           <span class="weekday">{{ dayWrapper.weekDayName }}</span>
         </div>

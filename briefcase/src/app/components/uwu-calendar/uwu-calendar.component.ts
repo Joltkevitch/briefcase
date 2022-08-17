@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CalendarData } from './models/calendar-data.model';
-import { TimeRangeEvent } from './models/time-range-event.model';
+import { ITimeRangeEvent } from './models/time-range-event.model';
 import { UwuCalendarService } from './uwu-calenda.service';
 
 @Component({
@@ -20,7 +20,7 @@ import { UwuCalendarService } from './uwu-calenda.service';
 export class CalendarComponent
   implements OnInit, AfterViewInit, OnChanges, OnDestroy
 {
-  @Input() timeRangeEvents: TimeRangeEvent[];
+  @Input() timeRangeEvents: ITimeRangeEvent[];
 
   calendarData: CalendarData;
 
@@ -29,20 +29,39 @@ export class CalendarComponent
   constructor(private calendarService: UwuCalendarService) {}
 
   ngOnInit(): void {
-    this.calendarService.onTimeRangeEventsChanges(this.timeRangeEvents);
+    this.setSubscriptions();
+  }
+
+  private setSubscriptions() {
     this.$calendarDataSubscription =
       this.calendarService.$calendarDataSubject.subscribe(
         (calendarData: CalendarData) => {
-          this.calendarData = calendarData;
+          this.onNewCalendarData(calendarData);
         }
       );
   }
 
-  ngOnChanges(changes: SimpleChanges): void {}
+  private onNewCalendarData(calendarData: CalendarData): void {
+    this.calendarData = calendarData;
+    this.timeRangeEvents = this.calendarService.setRandomColorsInEvents(
+      this.timeRangeEvents
+    );
+    this.calendarData.onTimeRangeEventsChanges(this.timeRangeEvents);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.calendarData && !changes['timeRangeEvents'].isFirstChange()) {
+      this.timeRangeEvents = this.calendarService.setRandomColorsInEvents(
+        this.timeRangeEvents
+      );
+      this.calendarData.onTimeRangeEventsChanges(this.timeRangeEvents);
+    }
+  }
 
   ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
+    this.calendarData.unsubscribe();
     this.$calendarDataSubscription.unsubscribe();
   }
 }

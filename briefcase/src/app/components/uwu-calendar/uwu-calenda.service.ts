@@ -24,22 +24,21 @@ export class UwuCalendarService {
 
   constructor() {
     this.$calendarDataSubject = new BehaviorSubject(new CalendarData());
-    this.$timeRangeEventsSubject = new BehaviorSubject([new TimeRangeEvent()]);
   }
 
   onCalendarChanges(calendarData: CalendarData): void {
     this.$calendarDataSubject.next(calendarData);
   }
 
-  onTimeRangeEventsChanges(timeRangeEvents: TimeRangeEvent[]): void {
-    timeRangeEvents = timeRangeEvents.map((timeRange) => {
-      timeRange.event = timeRange.event.assingColor(this.getRandomColor());
-      return timeRange;
+  setRandomColorsInEvents(timeRangeEvents: TimeRangeEvent[]): TimeRangeEvent[] {
+    return timeRangeEvents.map((timeEvent) => {
+      if (timeEvent.event.color === '')
+        timeEvent.event = timeEvent.event.assingColor(this.getRandomColor());
+      return timeEvent;
     });
-    this.$timeRangeEventsSubject.next(timeRangeEvents);
   }
 
-  getRandomColor(): string {
+  private getRandomColor(): string {
     const randomIndex = Math.floor(Math.random() * this.defaultColors.length);
     const selectedColor = this.defaultColors.splice(randomIndex, 1)[0];
     this.usedColors.push(selectedColor);

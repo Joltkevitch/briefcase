@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TimeRangeEvent } from './components/uwu-calendar/models/time-range-event.model';
 import { Event } from './components/uwu-calendar/models/event.model';
+import { TimeRange } from './components/uwu-calendar/models/time-range.model';
 
 @Component({
   selector: 'uwu-root',
@@ -9,8 +10,8 @@ import { Event } from './components/uwu-calendar/models/event.model';
 })
 export class AppComponent {
   timeRangeEvents = [
-    new TimeRangeEvent(
-      new Event({
+    new TimeRangeEvent({
+      event: new Event({
         name: 'holidays',
         description: 'Some of my holidays',
         type: 'H',
@@ -20,13 +21,16 @@ export class AppComponent {
           return new Event();
         },
       }),
-      {
-        from: new Date(2022, 8, 1),
-        to: new Date(2022, 8, 17),
-      }
-    ),
-    new TimeRangeEvent(
-      {
+      timeRange: new TimeRange({
+        from: new Date(2022, 7, 1),
+        to: new Date(2022, 7, 18),
+        isInRange(outerDate) {
+          return false;
+        },
+      }),
+    }),
+    new TimeRangeEvent({
+      event: new Event({
         name: 'Sick',
         description: 'Migrane',
         type: 'S',
@@ -35,11 +39,14 @@ export class AppComponent {
         assingColor: (color: string) => {
           return new Event();
         },
-      },
-      {
-        from: new Date(2022, 8, 18, 9, 0, 0),
-        to: new Date(2022, 8, 18, 11, 30, 0),
-      }
-    ),
+      }),
+      timeRange: new TimeRange({
+        from: new Date(2022, 7, 18, 9, 30, 0),
+        to: new Date(2022, 7, 18, 18, 30, 0),
+        isInRange(outerDate) {
+          return false;
+        },
+      }),
+    }),
   ];
 }

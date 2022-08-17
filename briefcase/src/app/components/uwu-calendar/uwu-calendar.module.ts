@@ -7,7 +7,7 @@ import { CalendarYearSelectionComponent } from './calendar-year-selection/calend
 import { CalendarMonthSelectionComponent } from './calendar-month-selection/calendar-month-selection.component';
 import { CalendarDaySelectionComponent } from './calendar-day-selection/calendar-day-selection.component';
 import { UwuCalendarService } from './uwu-calenda.service';
-import * as CalendarProtos from './calendar.prototype';
+import { DayEventDirective } from './directives/event-date.directive';
 @NgModule({
   imports: [CommonModule, BrowserModule, BrowserAnimationsModule],
   declarations: [
@@ -15,6 +15,7 @@ import * as CalendarProtos from './calendar.prototype';
     CalendarYearSelectionComponent,
     CalendarMonthSelectionComponent,
     CalendarDaySelectionComponent,
+    DayEventDirective
   ],
   exports: [CalendarComponent],
   providers: [DatePipe, UwuCalendarService],

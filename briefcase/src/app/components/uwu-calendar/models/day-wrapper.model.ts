@@ -1,17 +1,30 @@
 import { Month, WeekDay } from '../calendar.prototype';
+import { ITimeRangeEvent } from './time-range-event.model';
 
 export class DayWrapper {
+  date: Date;
   day: number;
+  month: Month;
+  year: number;
   weekDay: WeekDay;
   weekDayName: string;
-  month: Month;
   monthName: string;
+  timeRangeEvents: ITimeRangeEvent[];
 
-  constructor(day: number, weekDay?: WeekDay, month?: Month) {
-    this.day = day;
-    this.weekDay = weekDay ? weekDay : 0;
+  constructor(date: Date) {
+    this.date = date;
+    this.day = date.getDate();
+    this.weekDay = date.getDay();
+    this.month = date.getMonth();
+    this.year = date.getFullYear();
     this.weekDayName = WeekDay.toString(this.weekDay);
-    this.month = month ? month : 0;
-    this.monthName = Month.toString(month);
+    this.monthName = Month.toString(this.month);
+  }
+
+  setTimeRangeEvents(timeRangeEvents: ITimeRangeEvent[]): DayWrapper {
+    this.timeRangeEvents = timeRangeEvents.filter((timeEvent) =>
+      timeEvent.doesDateOverlap(this.date)
+    );
+    return this;
   }
 }

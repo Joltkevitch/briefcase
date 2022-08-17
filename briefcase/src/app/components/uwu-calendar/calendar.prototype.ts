@@ -36,7 +36,11 @@ export enum WeekDayForNormalPeople {
 
 declare global {
   interface Date {
-    getSecondsOnDay(): number;
+    getMinutesOnDay(): number;
+  }
+
+  interface Array<T> {
+    hasItems(): boolean;
   }
 }
 
@@ -92,7 +96,11 @@ export namespace Month {
   }
 }
 
-Date.prototype.getSecondsOnDay = function (): number {
-  const minutesToSeconds = this.getUTCMinutes() * 60 + this.getUTCSeconds();
-  return this.getUTCHours() * 60 * 60 + minutesToSeconds;
+Date.prototype.getMinutesOnDay = function (): number {
+  const minutesToSeconds = this.getMinutes();
+  return this.getHours() * 60 + minutesToSeconds;
+};
+
+Array.prototype.hasItems = function (): boolean {
+  return this.length > 0;
 };

@@ -1,18 +1,18 @@
 export class EventDayPositioning {
   dayYPosition: number;
-  dayArea: number;
+  containerRelativeHeight: number;
 
-  private readonly twentyFourHoursInMs: number = 86400;
+  private readonly twentyFourHoursInMinutes: number = 1440;
 
   constructor(fromMs: number, toMs: number) {
     if (fromMs !== toMs) {
-      this.dayYPosition = (fromMs * 100) / this.twentyFourHoursInMs;
+      this.dayYPosition = (fromMs * 100) / this.twentyFourHoursInMinutes;
       const difference = toMs - fromMs;
-      this.dayArea =
-        (difference * 100) / this.twentyFourHoursInMs + this.dayYPosition;
+      this.containerRelativeHeight =
+        (difference * 100) / this.twentyFourHoursInMinutes;
     } else {
       this.dayYPosition = 0;
-      this.dayArea = 100;
+      this.containerRelativeHeight = 100;
     }
   }
 }

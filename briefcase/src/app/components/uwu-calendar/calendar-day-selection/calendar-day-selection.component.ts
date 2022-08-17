@@ -32,7 +32,6 @@ export class CalendarDaySelectionComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToPipelines(): void {
-    this.timeRangeEventsSubscription();
     this.$calendarDataSubscription =
       this.uwuCalendarService.$calendarDataSubject.subscribe(
         (calendarData: CalendarData) => {
@@ -51,22 +50,11 @@ export class CalendarDaySelectionComponent implements OnInit, OnDestroy {
   }
 
   private onNewMonth(newMonth: Month): void {
-    this.monthDays = this.calendar.getMonthGridInDays();
-    console.log(this.monthDays);
-  }
-
-  private timeRangeEventsSubscription(): void {
-    this.$timeRangeEventsSubscription =
-      this.uwuCalendarService.$timeRangeEventsSubject.subscribe(
-        (timeRangeEvents) => {
-          console.log(timeRangeEvents);
-          this.timeRangeEvents = timeRangeEvents;
-        }
-      );
+     this.monthDays = this.calendar.getMonthGridInDays();
+     console.log(this.monthDays)
   }
 
   ngOnDestroy(): void {
-    this.$timeRangeEventsSubscription.unsubscribe();
     this.$calendarDataSubscription.unsubscribe();
     this.$monthSubscription.unsubscribe();
   }
